@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="家計簿">
+<meta name="theme-color" content="#0f1117">
+<title>家計簿</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif;background:#0f1117;color:#e8e8e8;max-width:480px;margin:0 auto;min-height:100vh;}
+header{background:linear-gradient(160deg,#1a1f2e,#141820);padding:env(safe-area-inset-top,16px) 14px 0;border-bottom:1px solid #2a2f3e;}
+.ht{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-bottom:12px;}
+.an{font-size:17px;font-weight:800;letter-spacing:4px;color:#a8e6cf;}
+.hr{display:flex;align-items:center;gap:8px;}
+.sv{font-size:10px;transition:color 0.3s;}
+.ib{background:none;border:1px solid #3a3f50;color:#aaa;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:12px;}
+.mn{display:flex;align-items:center;gap:8px;}
+.nb{background:none;border:1px solid #3a3f50;color:#aaa;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:15px;}
+.ml{font-size:12px;font-weight:600;color:#ccc;min-width:80px;text-align:center;}
+.hero{background:linear-gradient(135deg,#1e2535,#171d2c);border:1px solid #2e3548;border-radius:12px 12px 0 0;padding:14px;margin-top:4px;}
+.hr2{display:flex;gap:12px;margin-bottom:12px;}
+.hb2{flex:1;}
+.hl{font-size:9px;color:#666;letter-spacing:1px;margin-bottom:2px;}
+.ha{font-size:22px;font-weight:900;letter-spacing:-1px;margin-bottom:2px;}
+.hs2{font-size:9px;color:#555;}
+.hd{border-top:1px solid #252b3a;margin-bottom:10px;}
+.hbot{display:flex;justify-content:space-between;align-items:flex-end;}
+.ba{font-size:26px;font-weight:900;}
+.sr{text-align:right;}
+.sa{font-size:18px;font-weight:800;}
+.ss2{font-size:9px;color:#555;}
+.fw{font-size:11px;color:#ffd699;margin-top:6px;display:none;}
+.sbanner{background:linear-gradient(135deg,#2a1f0e,#1f1a0a);border:1px solid #8c6a2a;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:12px;line-height:1.7;}
+.sbanner b{color:#ffd699;}
+.sbanner input{width:100%;background:#1a1f2e;border:1px solid #4a3a1e;border-radius:6px;color:#e8e8e8;padding:8px 10px;font-size:13px;outline:none;margin-top:6px;font-family:inherit;}
+.sbtn{background:linear-gradient(135deg,#8c6a2a,#6b4f1e);border:none;border-radius:8px;color:#fff;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;width:100%;}
+.gind{font-size:11px;padding:8px 12px;border-radius:8px;margin-bottom:10px;text-align:center;display:none;}
+.gok{background:#1a2e1f;border:1px solid #2a8c6a;color:#7ecfaa;}
+.gng{background:#2e1a1a;border:1px solid #8c2a2a;color:#ffaaaa;}
+nav{display:flex;background:#12161f;border-bottom:1px solid #2a2f3e;position:sticky;top:0;z-index:10;}
+.tb{flex:1;padding:11px 0;background:none;border:none;border-bottom:2px solid transparent;color:#666;font-size:12px;cursor:pointer;font-family:inherit;}
+.tb.active{color:#a8e6cf;border-bottom-color:#a8e6cf;}
+main{padding:10px 10px 100px;}
+.pn{display:none;}.pn.active{display:block;}
+.card{background:#141820;border:1px solid #1e2535;border-radius:12px;padding:14px;margin-bottom:10px;}
+.ct{font-size:11px;font-weight:700;color:#a8e6cf;letter-spacing:1px;margin-bottom:10px;}
+.ct.mt{margin-top:16px;}
+.fd{margin-bottom:12px;}
+.lb{font-size:10px;color:#666;display:block;margin-bottom:4px;}
+.ir{display:flex;align-items:center;gap:4px;}
+.yn{color:#666;font-size:14px;flex-shrink:0;}
+input[type=text],input[type=date],select{flex:1;background:#1a1f2e;border:1px solid #2e3548;border-radius:8px;color:#e8e8e8;padding:9px 10px;font-size:15px;outline:none;width:100%;font-family:inherit;-webkit-appearance:none;appearance:none;}
+input[type=date]{color-scheme:dark;}
+.fr{display:flex;justify-content:space-between;font-size:13px;color:#888;padding:6px 0;border-bottom:1px solid #1e2535;}
+.tr{display:flex;justify-content:space-between;font-size:13px;font-weight:700;border-top:1px solid #1e2535;padding-top:8px;margin-top:4px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.gi{background:#1a1f2e;border-radius:8px;padding:10px 12px;border:1px solid #2a2f3e;}
+.gl{font-size:10px;color:#555;margin-bottom:3px;}
+.gv{font-size:14px;font-weight:700;}
+.nt{font-size:10px;color:#555;margin-top:6px;line-height:1.7;}
+.em{color:#444;font-size:12px;text-align:center;padding:28px 0;}
+.rb{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.ab{background:linear-gradient(135deg,#2a8c6a,#1e6b50);border:none;border-radius:20px;color:#fff;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.li{display:flex;justify-content:space-between;align-items:center;background:#1a1f2e;border-radius:9px;padding:10px 12px;margin-bottom:6px;border:1px solid #2a2f3e;}
+.ll{font-size:13px;font-weight:600;margin-bottom:2px;}
+.ls{font-size:10px;color:#555;}
+.lr{display:flex;align-items:center;gap:8px;}
+.la{font-size:14px;font-weight:700;color:#ff9999;}
+.dl{background:none;border:none;color:#555;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:flex-end;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.ov.open{opacity:1;pointer-events:all;}
+.mod{background:#1a1f2e;border-radius:16px 16px 0 0;padding:20px 16px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;border:1px solid #2e3548;transform:translateY(100%);transition:transform 0.25s ease;}
+.ov.open .mod{transform:translateY(0);}
+.mt2{font-size:15px;font-weight:800;color:#a8e6cf;margin-bottom:16px;}
+.mb{display:flex;gap:10px;margin-top:16px;}
+.cb{flex:1;background:#12161f;border:1px solid #2e3548;border-radius:10px;color:#888;padding:11px 0;font-size:13px;cursor:pointer;font-family:inherit;}
+.ob{flex:2;background:linear-gradient(135deg,#2a8c6a,#1e6b50);border:none;border-radius:10px;color:#fff;padding:11px 0;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.sab{background:linear-gradient(135deg,#2a8c6a,#1e6b50);border:none;border-radius:10px;color:#fff;padding:13px 0;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;margin-top:12px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="ht">
+    <span class="an">家計簿</span>
+    <div class="hr">
+      <span class="sv" id="ss">読込中…</span>
+      <button class="ib" onclick="manualSave()">💾</button>
+      <div class="mn">
+        <button class="nb" onclick="chgMonth(-1)">‹</button>
+        <span class="ml" id="ml"></span>
+        <button class="nb" onclick="chgMonth(1)">›</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hr2">
+      <div class="hb2"><div class="hl">今月の収入</div><div class="ha" id="hi" style="color:#a8e6cf">¥0</div><div class="hs2" id="his"></div></div>
+      <div class="hb2"><div class="hl">今月の支出</div><div class="ha" id="ho" style="color:#ff9999">¥0</div></div>
+    </div>
+    <div class="hd"></div>
+    <div class="hbot">
+      <div><div class="hl">収支バランス</div><div class="ba" id="hb">¥0</div></div>
+      <div class="sr"><div class="hl" style="text-align:right">自分の貯金額</div><div class="sa" id="hsav">¥0</div><div class="ss2" id="hss"></div></div>
+    </div>
+    <div class="fw" id="hw"></div>
+  </div>
+</header>
+
+<nav>
+  <button class="tb active" onclick="tab('overview',0)">概要</button>
+  <button class="tb" onclick="tab('expenses',1)">支出</button>
+  <button class="tb" onclick="tab('future',2)">予定</button>
+  <button class="tb" onclick="tab('settings',3)">設定</button>
+</nav>
+
+<main>
+  <div class="pn active" id="p-overview">
+    <div class="card"><div class="ct">💰 給与・収入</div>
+      <div class="fd"><label class="lb">本業 給与</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="salarySelf" placeholder="例: 250,000"></div></div>
+      <div class="fd"><label class="lb">副業 給与</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="salaryPart" placeholder="例: 50,000"></div></div>
+    </div>
+    <div class="card"><div class="ct">🏦 銀行残高</div>
+      <div class="fd"><label class="lb">銀行の残高（夫婦共有分含む）</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="bankBalance" placeholder="例: 500,000"></div></div>
+      <div class="nt">自分の貯金 = 残高 − 自分の拠出 − 妻の拠出（設定タブで変更可）</div>
+    </div>
+    <div class="card"><div class="ct">💳 クレジットカード請求</div>
+      <div class="fd"><label class="lb">JCBカード</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="creditJCB" placeholder="例: 30,000"></div></div>
+      <div class="fd"><label class="lb">楽天カード</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="creditRakuten" placeholder="例: 20,000"></div></div>
+      <div class="tr"><span>クレカ合計</span><span id="sc" style="color:#a8e6cf">¥0</span></div>
+    </div>
+    <div class="card"><div class="ct">💡 光熱費（今月）</div>
+      <div class="fd"><label class="lb">電気代</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="electric" placeholder="例: 8,000"></div></div>
+      <div class="fd"><label class="lb">ガス代</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="gas" placeholder="例: 4,000"></div></div>
+      <div class="fd"><label class="lb">水道代</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="water" placeholder="例: 3,000"></div></div>
+      <div class="tr"><span>光熱費合計</span><span id="su" style="color:#a8e6cf">¥0</span></div>
+    </div>
+    <div class="card"><div class="ct">🏠 固定費（自動計上）</div>
+      <div class="fr"><span>家賃</span><span id="dr">¥0</span></div>
+      <div class="nt">設定タブで金額を変更できます</div>
+    </div>
+    <div class="card"><div class="ct">📊 今月のサマリー</div><div class="grid" id="sgrid"></div></div>
+  </div>
+
+  <div class="pn" id="p-expenses">
+    <div class="card">
+      <div class="rb"><div class="ct" style="margin-bottom:0">🛒 日々の支出</div><button class="ab" onclick="openEM()">＋ 追加</button></div>
+      <div id="el" style="margin-top:10px"></div>
+      <div class="tr" id="et" style="display:none"><span>合計</span><span id="etv" style="color:#a8e6cf">¥0</span></div>
+    </div>
+  </div>
+
+  <div class="pn" id="p-future">
+    <div class="card">
+      <div class="rb"><div class="ct" style="margin-bottom:0">📌 予定支出</div><button class="ab" onclick="openFM()">＋ 追加</button></div>
+      <div class="nt" style="margin-top:8px">年会費・保険など将来の支出を事前に記録</div>
+      <div id="fl" style="margin-top:10px"></div>
+      <div class="tr" id="ft" style="display:none"><span>合計</span><span id="ftv" style="color:#a8e6cf">¥0</span></div>
+    </div>
+  </div>
+
+  <div class="pn" id="p-settings">
+    <div class="sbanner" id="setup-banner">
+      <b>🔗 Googleスプレッドシート連携</b><br>
+      GASのウェブアプリURLを入力してください。<br>設定手順は同梱の <b>手順書.txt</b> を参照してください。
+      <input type="text" id="gas-url-input" placeholder="https://script.google.com/macros/s/...">
+      <button class="sbtn" onclick="saveGasUrl()">🔗 URLを保存して接続</button>
+    </div>
+    <div class="gind" id="gind"></div>
+    <div class="card">
+      <div class="ct">⚙️ 固定設定</div>
+      <div class="fd"><label class="lb">家賃（毎月自動計上）</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="s-rent"></div></div>
+      <div class="ct mt">👫 夫婦共有貯金</div>
+      <div class="fd"><label class="lb">自分の拠出額（毎月）</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="s-myShared"></div></div>
+      <div class="fd"><label class="lb">妻の拠出額（毎月）</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="s-wifeShared"></div></div>
+      <div class="nt" id="snote"></div>
+      <button class="sab" onclick="manualSave()">💾 スプレッドシートに保存</button>
+    </div>
+  </div>
+</main>
+
+<div class="ov" id="em" onclick="bgClose(event,'em')">
+  <div class="mod">
+    <div class="mt2">支出を追加</div>
+    <div class="fd"><label class="lb">日付</label><input type="date" id="med"></div>
+    <div class="fd"><label class="lb">内容</label><input type="text" id="mel" placeholder="例: コンビニ"></div>
+    <div class="fd"><label class="lb">カテゴリ</label><select id="mec"><option>食費</option><option>交通費</option><option>外食</option><option>娯楽</option><option>医療</option><option>日用品</option><option>衣類</option><option>その他</option></select></div>
+    <div class="fd"><label class="lb">金額</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="mea" placeholder="0"></div></div>
+    <div class="mb"><button class="cb" onclick="closeM('em')">キャンセル</button><button class="ob" onclick="addExp()">追加</button></div>
+  </div>
+</div>
+
+<div class="ov" id="fm" onclick="bgClose(event,'fm')">
+  <div class="mod">
+    <div class="mt2">予定支出を追加</div>
+    <div class="fd"><label class="lb">予定日</label><input type="date" id="mfd"></div>
+    <div class="fd"><label class="lb">内容</label><input type="text" id="mfl" placeholder="例: クレカ年会費"></div>
+    <div class="fd"><label class="lb">金額</label><div class="ir"><span class="yn">¥</span><input type="text" inputmode="numeric" id="mfa" placeholder="0"></div></div>
+    <div class="mb"><button class="cb" onclick="closeM('fm')">キャンセル</button><button class="ob" onclick="addFut()">追加</button></div>
+  </div>
+</div>
+
+<script>
+const GUK='kakeibo_gas_url';
+let GAS=localStorage.getItem(GUK)||'';
+let cfg={rent:80000,myShared:30000,wifeShared:30000};
+let db={},cur=ym(),stimer=null;
+
+function ym(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function td(){return new Date().toISOString().slice(0,10);}
+function n(v){return Number(String(v).replace(/,/g,''))||0;}
+function f(x){return Math.round(Number(x)).toLocaleString('ja-JP');}
+function gm(){if(!db[cur])db[cur]={salarySelf:'',salaryPart:'',bankBalance:'',creditJCB:'',creditRakuten:'',electric:'',gas:'',water:'',expenses:[],futureItems:[]};return db[cur];}
+
+async function gasLoad(){
+  if(!GAS){setSS('no-url');localLoad();loadInputs();loadSettings();ui();return;}
+  setSS('loading');
+  try{
+    const r=await fetch(GAS+'?action=load');
+    const j=await r.json();
+    if(j.ok){
+      if(j.data)Object.entries(j.data).forEach(([k,v])=>{db[k]=v;});
+      if(j.settings)cfg={...cfg,...j.settings};
+      setSS('saved');gind(true);
+    }else throw new Error(j.error);
+  }catch(e){setSS('error');gind(false,e.message);localLoad();}
+  loadInputs();loadSettings();ui();
+}
+async function gasSave(){
+  if(!GAS){setSS('no-url');localSave();return;}
+  setSS('saving');
+  try{
+    const r=await fetch(GAS,{method:'POST',body:JSON.stringify({action:'save',data:db,settings:cfg})});
+    const j=await r.json();
+    if(j.ok)setSS('saved');else throw new Error(j.error);
+  }catch(e){setSS('error');alert('保存エラー: '+e.message);}
+}
+function localLoad(){try{const d=localStorage.getItem('kk_d'),s=localStorage.getItem('kk_s');if(d)Object.assign(db,JSON.parse(d));if(s)cfg={...cfg,...JSON.parse(s)};}catch{}}
+function localSave(){try{localStorage.setItem('kk_d',JSON.stringify(db));localStorage.setItem('kk_s',JSON.stringify(cfg));setSS('saved');}catch{}}
+
+function sched(){setSS('unsaved');clearTimeout(stimer);stimer=setTimeout(manualSave,1500);}
+function manualSave(){clearTimeout(stimer);if(GAS)gasSave();else{setSS('saving');setTimeout(()=>{localSave();},30);}}
+
+function setSS(s){
+  const e=document.getElementById('ss');
+  const m={'saved':['✓ 保存済','#7ecfaa'],'unsaved':['● 未保存','#ff9999'],'saving':['保存中…','#ffd699'],'loading':['読込中…','#ffd699'],'error':['保存失敗','#ff6b6b'],'no-url':['URL未設定','#ffaaaa']};
+  const[t,c]=m[s]||['','#888'];e.textContent=t;e.style.color=c;
+}
+function gind(ok,msg=''){
+  const e=document.getElementById('gind');e.style.display='block';
+  if(ok){e.className='gind gok';e.textContent='✓ Googleスプレッドシートと接続済み';document.getElementById('setup-banner').style.display='none';}
+  else{e.className='gind gng';e.textContent='✗ 接続エラー: '+msg;}
+}
+function saveGasUrl(){
+  const v=document.getElementById('gas-url-input').value.trim();
+  if(!v.startsWith('https://script.google.com')){alert('正しいGoogle Apps ScriptのURLを入力してください');return;}
+  GAS=v;localStorage.setItem(GUK,v);gasLoad();
+}
+
+function fmtEl(el){const r=String(el.value).replace(/[^0-9]/g,'');el.value=r===''||r==='0'?'':Number(r).toLocaleString('ja-JP');}
+function clrEl(el){const r=String(el.value).replace(/[^0-9]/g,'');el.value=r==='0'?'':r;setTimeout(()=>el.select(),0);}
+function bindF(id){const el=document.getElementById(id);if(!el)return;el.addEventListener('focus',()=>clrEl(el));el.addEventListener('blur',()=>fmtEl(el));el.addEventListener('input',()=>{const r=el.value.replace(/[^0-9]/g,'');el.value=r;gm()[id]=r;sched();ui();});}
+function bindS(id,key){const el=document.getElementById(id);if(!el)return;el.addEventListener('focus',()=>clrEl(el));el.addEventListener('blur',()=>fmtEl(el));el.addEventListener('input',()=>{const r=el.value.replace(/[^0-9]/g,'');el.value=r;cfg[key]=r;sched();ui();});}
+
+function chgMonth(d){const[y,m]=cur.split('-').map(Number);const nd=new Date(y,m-1+d,1);cur=nd.getFullYear()+'-'+String(nd.getMonth()+1).padStart(2,'0');loadInputs();ui();}
+
+function tab(name,i){['overview','expenses','future','settings'].forEach(nm=>document.getElementById('p-'+nm).classList.remove('active'));document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));document.getElementById('p-'+name).classList.add('active');document.querySelectorAll('.tb')[i].classList.add('active');}
+
+function loadInputs(){
+  const m=gm();
+  ['salarySelf','salaryPart','bankBalance','creditJCB','creditRakuten','electric','gas','water'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=m[id];el.value=v&&v!=='0'?Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('ja-JP'):'';});
+  document.getElementById('ml').textContent=cur.replace('-','年')+'月';
+}
+function loadSettings(){
+  ['rent','myShared','wifeShared'].forEach(k=>{const el=document.getElementById('s-'+k);if(!el)return;const v=cfg[k];el.value=v&&v!=='0'?Number(String(v).replace(/[^0-9]/g,'')).toLocaleString('ja-JP'):'';});
+  if(GAS)document.getElementById('gas-url-input').value=GAS;
+}
+
+function renderExp(){
+  const m=gm(),el=document.getElementById('el'),te=document.getElementById('et');
+  if(!m.expenses.length){el.innerHTML='<div class="em">支出がありません</div>';te.style.display='none';return;}
+  const s=[...m.expenses].sort((a,b)=>b.date.localeCompare(a.date));
+  el.innerHTML=s.map(e=>`<div class="li"><div><div class="ll">${e.label}</div><div class="ls">${e.date} · ${e.category}</div></div><div class="lr"><span class="la">¥${f(n(e.amount))}</span><button class="dl" onclick="delE('${e.id}')">×</button></div></div>`).join('');
+  const t=m.expenses.reduce((s,e)=>s+n(e.amount),0);te.style.display='flex';document.getElementById('etv').textContent='¥'+f(t);
+}
+function renderFut(){
+  const m=gm(),el=document.getElementById('fl'),te=document.getElementById('ft');
+  if(!m.futureItems.length){el.innerHTML='<div class="em">予定支出がありません</div>';te.style.display='none';return;}
+  const s=[...m.futureItems].sort((a,b)=>a.date.localeCompare(b.date));
+  el.innerHTML=s.map(x=>`<div class="li"><div><div class="ll">${x.label}</div><div class="ls">${x.date}</div></div><div class="lr"><span class="la">¥${f(n(x.amount))}</span><button class="dl" onclick="delF('${x.id}')">×</button></div></div>`).join('');
+  const t=m.futureItems.reduce((s,x)=>s+n(x.amount),0);te.style.display='flex';document.getElementById('ftv').textContent='¥'+f(t);
+}
+
+function ui(){
+  const m=gm();
+  const inc=n(m.salarySelf)+n(m.salaryPart);
+  const util=n(m.electric)+n(m.gas)+n(m.water);
+  const cred=n(m.creditJCB)+n(m.creditRakuten);
+  const expt=m.expenses.reduce((s,e)=>s+n(e.amount),0);
+  const rent=n(cfg.rent),out=rent+util+cred+expt;
+  const shared=n(cfg.myShared)+n(cfg.wifeShared),bank=n(m.bankBalance);
+  const sav=bank-shared,bal=inc-out;
+  const futt=m.futureItems.reduce((s,x)=>s+n(x.amount),0);
+  document.getElementById('hi').textContent='¥'+f(inc);
+  document.getElementById('his').textContent=`本業 ¥${f(m.salarySelf)} + 副業 ¥${f(m.salaryPart)}`;
+  document.getElementById('ho').textContent='¥'+f(out);
+  const hb=document.getElementById('hb');hb.textContent=(bal<0?'−':'')+'¥'+f(Math.abs(bal));hb.style.color=bal<0?'#ff6b6b':'#a8e6cf';
+  const hs=document.getElementById('hsav');hs.textContent='¥'+f(sav);hs.style.color=sav<0?'#ff6b6b':'#ffd699';
+  document.getElementById('hss').textContent=`残高 ¥${f(bank)} − 共有 ¥${f(shared)}`;
+  const hw=document.getElementById('hw');if(futt>0){hw.style.display='block';hw.textContent=`⚠ 予定支出 ¥${f(futt)} あり`;}else hw.style.display='none';
+  document.getElementById('sc').textContent='¥'+f(cred);
+  document.getElementById('su').textContent='¥'+f(util);
+  document.getElementById('dr').textContent='¥'+f(rent);
+  const items=[['本業',n(m.salarySelf),'#a8e6cf'],['副業',n(m.salaryPart),'#a8e6cf'],['家賃',rent,'#ff9999'],['光熱費',util,'#ff9999'],['JCB',n(m.creditJCB),'#ff9999'],['楽天',n(m.creditRakuten),'#ff9999'],['日々支出',expt,'#ff9999']];
+  document.getElementById('sgrid').innerHTML=items.map(([l,v,c])=>`<div class="gi"><div class="gl">${l}</div><div class="gv" style="color:${c}">¥${f(v)}</div></div>`).join('');
+  document.getElementById('snote').textContent=`自分の貯金 = 銀行残高 − 自分の拠出 ¥${f(cfg.myShared)} − 妻の拠出 ¥${f(cfg.wifeShared)}\n設定は全月共通で引き継がれます。`;
+  renderExp();renderFut();
+}
+
+function openEM(){document.getElementById('med').value=td();document.getElementById('mel').value='';document.getElementById('mea').value='';document.getElementById('mec').value='食費';document.getElementById('em').classList.add('open');}
+function openFM(){document.getElementById('mfd').value='';document.getElementById('mfl').value='';document.getElementById('mfa').value='';document.getElementById('fm').classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function bgClose(e,id){if(e.target===document.getElementById(id))closeM(id);}
+function addExp(){const lbl=document.getElementById('mel').value.trim(),amt=document.getElementById('mea').value.replace(/[^0-9]/g,'');if(!lbl||!amt)return;gm().expenses.push({id:Date.now().toString(),date:document.getElementById('med').value,label:lbl,category:document.getElementById('mec').value,amount:amt});closeM('em');sched();ui();}
+function delE(id){gm().expenses=gm().expenses.filter(e=>e.id!==id);sched();ui();}
+function addFut(){const lbl=document.getElementById('mfl').value.trim(),amt=document.getElementById('mfa').value.replace(/[^0-9]/g,''),dt=document.getElementById('mfd').value;if(!lbl||!amt||!dt)return;gm().futureItems.push({id:Date.now().toString(),date:dt,label:lbl,amount:amt});closeM('fm');sched();ui();}
+function delF(id){gm().futureItems=gm().futureItems.filter(x=>x.id!==id);sched();ui();}
+['mea','mfa'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('focus',()=>clrEl(el));el.addEventListener('blur',()=>fmtEl(el));el.addEventListener('input',()=>{el.value=el.value.replace(/[^0-9]/g,'');});});
+
+['salarySelf','salaryPart','bankBalance','creditJCB','creditRakuten','electric','gas','water'].forEach(bindF);
+bindS('s-rent','rent');bindS('s-myShared','myShared');bindS('s-wifeShared','wifeShared');
+gasLoad();
+</script>
+</body>
+</html>
